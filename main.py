@@ -56,3 +56,39 @@ if __name__ == "__main__":
         "Yeni Maaş": [calisan1.zam_hakki(),calisan2.zam_hakki(),calisan3.zam_hakki(),mavi_yaka1.zam_hakki(),mavi_yaka2.zam_hakki(),beyaz_yaka1.zam_hakki(),beyaz_yaka2.zam_hakki()]
     }
     
+    # Sözlüğü DataFrame'e çevirme
+    df = pd.DataFrame.from_dict(data)
+    
+    # Boş değerlerin yerine 0 değeri koyma
+    df.fillna(0, inplace=True)
+    print(f"\n***************************************************** DataFrame **************************************************\n{df}")
+    
+    # Tecrübe ve yeni maaş ortalaması için gruplandırma ve ortalamalarını yazdırma
+    print(f"\nÇalışanların Yeni Maaş ortalamaları: {(float(calisan1.zam_hakki()) + float(calisan2.zam_hakki()) + float(calisan3.zam_hakki()))/3}")
+    print(f"Çalışanların Tecrübe ortalamaları: {(float(calisan1.get_tecrube()) + float(calisan2.get_tecrube()) + float(calisan3.get_tecrube()))/3}")
+    print(f"Mavi Yakalıların Yeni Maaş ortalamaları: {(float(mavi_yaka1.zam_hakki()) + float(mavi_yaka2.zam_hakki()))/2}")
+    print(f"Mavi Yakalıların Tecrübe ortalamaları: {(float(mavi_yaka1.get_tecrube()) + float(mavi_yaka2.get_tecrube()))/2}")
+    print(f"Beyaz Yakalıların Yeni Maaş ortalamaları: {(float(beyaz_yaka1.zam_hakki()) + float(beyaz_yaka2.zam_hakki()))/2}")
+    print(f"Beyaz Yakalıların Tecrübe ortalamaları: {(float(beyaz_yaka1.get_tecrube()) + float(beyaz_yaka2.get_tecrube()))/2}\n")
+ 
+    # Maaşı 15000 TL üzerinde olanları bulma
+    maas_ustu = df[df['Maaş'] > 15000]
+    toplam_sayi = len(maas_ustu)
+    print(f"Maaşı 15000 TL üzerinde olanların toplam sayısı: {toplam_sayi}\n")
+    
+    # Yeni maaşa göre küçükten büyüğe doğru sıralama
+    df_siralama = df["Yeni Maaş"].sort_values()
+    print(f"************* Yeni maaşların küçükten büyüğe doğru sıralanışı ***************\n{df_siralama}\n")
+    
+    # Tecrübesi 3 seneden fazla olan Beyaz Yakalıları Bulma
+    filtre = (df['İşçiler'] == 'Beyaz Yaka') & (df['Tecrübe'] > 3)
+    print(f"********************* Tecrübesi 3 seneden fazla olan Beyaz Yakalılar *********************\n{df[filtre]}\n")
+    
+    # Yeni maaşı 10000 TL üzerinde olanlar için; 2-5 satır arası olanları, TC No ve Yeni Maaş sütunlarını bulma
+    yuksek_maas = df[df['Yeni Maaş'] > 10000]
+    secilen_sutunlar = yuksek_maas.loc[2:5, ['TC No', 'Yeni Maaş']]
+    print(f"\n*********** Yeni maaşı 10000 TL üzerinde olanlar için; 2-5 satır arası TC No ve Yeni Maaş sütunları ************\n{secilen_sutunlar}")
+    
+    # ad, soyad, sektör ve yeni maaşı içeren DataFrame
+    yeni_df = df[['Ad', 'Soyad', 'Sektör', 'Yeni Maaş']]
+    print(f"\n************************** Ad Soyad, sektör ve yeni maaşı içeren yeni DataFrame ******************************\n{yeni_df}")
